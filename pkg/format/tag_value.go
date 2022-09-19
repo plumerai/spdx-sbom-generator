@@ -46,7 +46,9 @@ PackageComment: {{ .PackageComment }}
 Relationship: {{ .SPDXElementID }} {{ .RelationshipType }} {{ .RelatedSPDXElement }}
 {{- end }}
 
+#
 {{- with .ExtractedLicensingInfos -}}
+
 ##### Non-standard license
 {{ range . }}
 LicenseID: {{ .LicenseID }}
