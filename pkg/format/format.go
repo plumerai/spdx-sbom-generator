@@ -163,8 +163,8 @@ func (f *Format) convertToPackage(module models.Module) (models.Package, error) 
 		PackageLicenseConcluded: setPkgValue(module.LicenseConcluded),
 		PackageLicenseDeclared:  setPkgValue(module.LicenseDeclared),
 		PackageCopyrightText:    setPkgValue(module.Copyright),
-		PackageLicenseComments:  setPkgValue(""),
-		PackageComment:          setPkgValue(""),
+		PackageLicenseComments:  setPkgValue(module.CommentsLicense),
+		PackageComment:          setPkgValue(module.PackageComment),
 		RootPackage:             module.Root,
 	}, nil
 }

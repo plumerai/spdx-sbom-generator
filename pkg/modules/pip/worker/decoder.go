@@ -140,7 +140,8 @@ func (d *MetadataDecoder) BuildModule(metadata Metadata) models.Module {
 	module.LocalPath = metadata.LocalPath
 	module.PackageURL = metadata.PackageReleaseURL
 	module.PackageHomePage = metadata.HomePage
-	module.PackageComment = metadata.Description
+	module.PackageComment = "Package used unmodified"
+	module.CommentsLicense = ""
 
 	if (metadata.Root) && (len(metadata.HomePage) > 0) && metadata.HomePage != "None" {
 		module.PackageURL = metadata.HomePage
@@ -191,7 +192,7 @@ func (d *MetadataDecoder) BuildModule(metadata Metadata) models.Module {
 		module.LicenseDeclared = helper.BuildLicenseDeclared(licensePkg.ID)
 		module.LicenseConcluded = helper.BuildLicenseConcluded(licensePkg.ID)
 		module.Copyright = helper.GetCopyright(licensePkg.ExtractedText)
-		module.CommentsLicense = licensePkg.Comments
+		module.CommentsLicense = fmt.Sprintf("<text>%s\n%s</text>", licensePkg.Comments, licensePkg.ExtractedText)
 		if !helper.LicenseSPDXExists(licensePkg.ID) {
 			licensePkg.ID = fmt.Sprintf("LicenseRef-%s", licensePkg.ID)
 			licensePkg.ExtractedText = fmt.Sprintf("<text>%s</text>", licensePkg.ExtractedText)
@@ -205,7 +206,7 @@ func (d *MetadataDecoder) BuildModule(metadata Metadata) models.Module {
 			module.LicenseDeclared = helper.BuildLicenseDeclared(licensePkg.ID)
 			module.LicenseConcluded = helper.BuildLicenseConcluded(licensePkg.ID)
 			module.Copyright = helper.GetCopyright(licensePkg.ExtractedText)
-			module.CommentsLicense = licensePkg.Comments
+			module.CommentsLicense = fmt.Sprintf("<text>%s\n%s</text>", licensePkg.Comments, licensePkg.ExtractedText)
 			if !helper.LicenseSPDXExists(licensePkg.ID) {
 				licensePkg.ID = fmt.Sprintf("LicenseRef-%s", licensePkg.ID)
 				licensePkg.ExtractedText = fmt.Sprintf("<text>%s</text>", licensePkg.ExtractedText)
