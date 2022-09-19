@@ -80,6 +80,24 @@ func GetLicenses(modulePath string) (*models.License, error) {
 			}
 		}
 	}
+	// Try the metadata file
+	var metadata_file = modulePath + "/METADATA"
+	b, err := ioutil.ReadFile(metadata_file)
+	if err != nil {
+		return nil, errors.New(fmt.Sprintf("could not detect license for %s\n", modulePath))
+	}
+	s := string(b)
+	r, _ := regexp.Compile("License: (.*)")
+	matches := r.FindAllStringSubmatch(s, -1)
+	for _, v := range matches {
+		license := strings.Replace(strings.TrimLeft(v[1], " "), " ", "-", -1)
+		return &models.License{ID: license,
+			Name:          license,
+			ExtractedText: license,
+			Comments:      "",
+			File:          metadata_file}, nil
+
+	}
 	return nil, errors.New(fmt.Sprintf("could not detect license for %s\n", modulePath))
 }
 
