@@ -197,6 +197,21 @@ func (d *MetadataDecoder) BuildModule(metadata Metadata) models.Module {
 			licensePkg.ExtractedText = fmt.Sprintf("<text>%s</text>", licensePkg.ExtractedText)
 			module.OtherLicense = append(module.OtherLicense, licensePkg)
 		}
+	} else {
+		// Try with 'license_files' suffix instead
+		var license_path = metadata.DistInfoPath + "/license_files/"
+		licensePkg, err := helper.GetLicenses(license_path)
+		if err == nil {
+			module.LicenseDeclared = helper.BuildLicenseDeclared(licensePkg.ID)
+			module.LicenseConcluded = helper.BuildLicenseConcluded(licensePkg.ID)
+			module.Copyright = helper.GetCopyright(licensePkg.ExtractedText)
+			module.CommentsLicense = licensePkg.Comments
+			if !helper.LicenseSPDXExists(licensePkg.ID) {
+				licensePkg.ID = fmt.Sprintf("LicenseRef-%s", licensePkg.ID)
+				licensePkg.ExtractedText = fmt.Sprintf("<text>%s</text>", licensePkg.ExtractedText)
+				module.OtherLicense = append(module.OtherLicense, licensePkg)
+			}
+		}
 	}
 
 	// Prepare dependency module
